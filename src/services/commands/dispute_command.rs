@@ -16,7 +16,8 @@ fn process_dispute_command(app_state: &mut AppState, cmd: &DisputeCommand) -> Ap
     let tx = cmd.tx;
 
     let (amount, ok) = if let Some(rec) = app_state.engine.txs.get(&tx) {
-        if rec.client != client || rec.kind != TxKind::Deposit || rec.state != DisputeState::Normal {
+        if rec.client != client || rec.kind != TxKind::Deposit || rec.state != DisputeState::Normal
+        {
             (Amount::zero(), false)
         } else {
             (rec.amount, true)
