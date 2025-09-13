@@ -16,9 +16,7 @@ fn process_chargeback_command(app_state: &mut AppState, cmd: &ChargebackCommand)
     let tx = cmd.tx;
 
     let (amount, ok) = if let Some(rec) = app_state.engine.txs.get(&tx) {
-        if rec.client != client {
-            (Amount::zero(), false)
-        } else if rec.state != DisputeState::Disputed {
+        if rec.client != client || rec.state != DisputeState::Disputed {
             (Amount::zero(), false)
         } else {
             (rec.amount, true)
