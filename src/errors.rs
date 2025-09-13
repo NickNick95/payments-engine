@@ -1,5 +1,11 @@
 #[derive(thiserror::Error, Debug)]
 pub enum AppErrors {
+    #[error("Internal error: {0}")]
+    Internal(String),
+
+    #[error("Overflow error")]
+    Overflow,
+
     #[error(transparent)]
     AmountParseError(#[from] AmountParseError),
 }
