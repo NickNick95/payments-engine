@@ -1,7 +1,7 @@
 use crate::models::domain_state::{Account, TxRecord};
 use crate::models::identifiers::{ClientId, TxId};
 use std::collections::HashMap;
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct AppState {
     pub engine: Engine,
 }
@@ -15,5 +15,9 @@ pub struct Engine {
 impl Engine {
     pub fn acct_mut(&mut self, c: ClientId) -> &mut Account {
         self.accounts.entry(c).or_default()
+    }
+
+    pub fn accounts_iter(&self) -> impl Iterator<Item = (&ClientId, &Account)> {
+        self.accounts.iter()
     }
 }

@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "lowercase")]
-pub enum TxType {
+pub enum CsvTxType {
     Deposit,
     Withdrawal,
     Dispute,
@@ -16,7 +16,7 @@ pub enum TxType {
 #[derive(Debug, Deserialize)]
 pub struct InputRow {
     #[serde(rename = "type")]
-    pub t: TxType,
+    pub t: CsvTxType,
     pub client: ClientId,
     pub tx: TxId,
     pub amount: Option<String>,

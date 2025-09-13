@@ -1,7 +1,7 @@
 use crate::errors::{AppErrors, AppResult};
 use crate::models::domain_state::{DisputeState, TxKind, TxRecord};
 use crate::models::tx_command::WithdrawalCommand;
-use crate::services::tx_command_trait::TxCommandTrait;
+use crate::services::commands::traits::tx_command_trait::TxCommandTrait;
 use crate::state::AppState;
 
 impl TxCommandTrait for WithdrawalCommand {

@@ -6,6 +6,12 @@ pub enum AppErrors {
     #[error("Overflow error")]
     Overflow,
 
+    #[error("invalid input: {0}")]
+    InvalidInput(&'static str),
+
+    #[error("io: {0}")]
+    Io(String),
+
     #[error(transparent)]
     AmountParseError(#[from] AmountParseError),
 }

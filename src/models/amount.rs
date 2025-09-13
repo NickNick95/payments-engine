@@ -1,12 +1,8 @@
 use crate::consts::SCALE;
 use crate::errors::{AmountParseError, AppErrors, AppResult};
 use std::fmt::{Display, Formatter};
+use std::str::FromStr;
 
-/// =======================
-/// Money (fixed-point, 4dp)
-/// =======================
-
-/// 1 unit = 0.0001 (so 10_000 == 1.0000)
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Amount(pub i64);
 
@@ -74,6 +70,17 @@ impl Amount {
             .ok_or(AmountParseError::Overflow)?;
         let val = base.checked_add(frac).ok_or(AmountParseError::Overflow)?;
         Ok(if neg { Amount(-val) } else { Amount(val) })
+    }
+}
+
+impl FromStr for Amount {
+    type Err = AmountParseError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Amount::parse_4dp(s).map_err(|e| match e {
+            AppErrors::AmountParseError(err) => err,
+            _ => AmountParseError::MalformedInt,
+        })
     }
 }
 
