@@ -23,6 +23,10 @@ mod state;
 /// - Run the main application logic via [`run_app`].
 ///
 /// Logs "Application started" and "Application ended" at INFO level.
+///
+/// # Returns
+/// * `AppResult<()>` - Returns `Ok(())` if the application runs successfully,
+///   or an `AppErrors` variant if an error occurs.
 fn main() -> AppResult<()> {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
     info!("Application started");
@@ -42,6 +46,13 @@ fn main() -> AppResult<()> {
 /// - Emit the final account states to stdout (via [`emit_accounts_to_stdout`]).
 ///
 /// Logs when processing starts and ends.
+///
+/// # Arguments
+/// * `args` - A reference to the parsed CLI arguments.
+///
+/// # Returns
+/// * `AppResult<()>` - Returns `Ok(())` if the application logic runs successfully,
+///   or an `AppErrors` variant if an error occurs.
 pub fn run_app(args: &Cli) -> AppResult<()> {
     info!("Starting to process input file: {}", args.input);
 
@@ -66,6 +77,13 @@ pub fn run_app(args: &Cli) -> AppResult<()> {
 /// - Flush the writer at the end.
 ///
 /// Logs the number of accounts written.
+///
+/// # Arguments
+/// * `app_state` - A reference to the application state containing the engine.
+///
+/// # Returns
+/// * `AppResult<()>` - Returns `Ok(())` if the accounts are successfully emitted,
+///   or an `AppErrors` variant if an error occurs.
 pub fn emit_accounts_to_stdout(app_state: &AppState) -> AppResult<()> {
     let out = io::stdout();
     let handle = out.lock();
