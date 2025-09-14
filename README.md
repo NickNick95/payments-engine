@@ -7,9 +7,6 @@ It reads a CSV of transactions, applies them in **file order**, and prints the f
 cargo run -- transactions.csv > accounts.csv
 ```
 
-> Designed for correctness (no precision loss), clarity, and easy extensibility.
-
-
 ## Table of Contents
 
 - [Features](#features)
