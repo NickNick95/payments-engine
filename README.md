@@ -284,7 +284,8 @@ classDiagram
   Engine "1" o-- "many" TxRecord
 ```
 
-### Dispute lifecycle
+## Transaction Flows
+### Dispute flow
 
 ```mermaid
 stateDiagram-v2
@@ -295,6 +296,51 @@ stateDiagram-v2
   ChargedBack --> [*]
 ```
 
+### Deposit flow
+
+```mermaid
+flowchart TD
+  Start([Start]) --> CheckDup{Duplicate tx?}
+  CheckDup -- Yes --> End[Ignore]
+  CheckDup -- No --> CheckLocked{Account locked?}
+  CheckLocked -- Yes --> End
+  CheckLocked -- No --> Update[Increase available, record tx as Deposit]
+  Update --> End[Done]
+```
+
+### Withdrawal flow
+
+```mermaid
+flowchart TD
+  Start([Start]) --> CheckDup{Duplicate tx?}
+  CheckDup -- Yes --> End[Ignore]
+  CheckDup -- No --> CheckLocked{Account locked?}
+  CheckLocked -- Yes --> End
+  CheckLocked -- No --> CheckFunds{Enough available?}
+  CheckFunds -- No --> End[Ignore]
+  CheckFunds -- Yes --> Update[Decrease available, record tx as Withdrawal]
+  Update --> End[Done]
+```
+
+### Resolve flow
+
+```mermaid
+flowchart TD
+  Start([Start]) --> Lookup{Tx exists & Disputed?}
+  Lookup -- No --> End[Ignore]
+  Lookup -- Yes --> Update[Move funds: held → available, mark Normal]
+  Update --> End[Done]
+```
+
+### Chargeback flow
+
+```mermaid
+flowchart TD
+  Start([Start]) --> Lookup{Tx exists & Disputed?}
+  Lookup -- No --> End[Ignore]
+  Lookup -- Yes --> Update[Subtract held, lock account, mark ChargedBack]
+  Update --> End[Done]
+``` 
 
 ## Design Decisions
 
