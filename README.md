@@ -285,16 +285,6 @@ classDiagram
 ```
 
 ## Transaction Flows
-### Dispute flow
-
-```mermaid
-stateDiagram-v2
-  [*] --> Normal
-  Normal --> Disputed: dispute(tx)
-  Disputed --> Normal: resolve(tx)
-  Disputed --> ChargedBack: chargeback(tx) / lock account
-  ChargedBack --> [*]
-```
 
 ### Deposit flow
 
@@ -305,6 +295,18 @@ flowchart TD
   CheckDup -- No --> CheckLocked{Account locked?}
   CheckLocked -- Yes --> End
   CheckLocked -- No --> Update[Increase available, record tx as Deposit]
+  Update --> End[Done]
+```
+
+### Dispute flow
+
+```mermaid
+flowchart TD
+  Start([Start]) --> Lookup{Tx exists, Deposit, Normal?}
+  Lookup -- No --> End[Ignore]
+  Lookup -- Yes --> CheckFunds{Enough available?}
+  CheckFunds -- No --> End
+  CheckFunds -- Yes --> Update[Move funds: available → held, mark Disputed]
   Update --> End[Done]
 ```
 
