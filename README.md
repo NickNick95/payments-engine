@@ -121,9 +121,6 @@ src/
 test_files/                    # example CSVs
 ```
 
-> The exact file names in your tree match the above; this README describes the intent of each.
-
-
 ## Core Models
 
 ### `Amount` (in `models/amount.rs`)
