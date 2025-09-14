@@ -12,6 +12,14 @@ use std::fs::File;
 use std::io::BufReader;
 use std::str::FromStr;
 
+/// Processes transactions from a CSV file and updates the application state.
+///
+/// # Arguments
+/// * `path` - The file path to the CSV file containing transaction data.
+/// * `app_state` - A mutable reference to the application state.
+///
+/// # Returns
+/// * `AppResult<()>` - Returns `Ok(())` if successful, or an `AppErrors` variant if an error occurs.
 pub fn run_from_csv_path(path: &str, app_state: &mut AppState) -> AppResult<()> {
     let file = File::open(path).map_err(|e| AppErrors::Io(format!("open {path}: {e}")))?;
     let mut rdr = ReaderBuilder::new()
@@ -39,6 +47,14 @@ pub fn run_from_csv_path(path: &str, app_state: &mut AppState) -> AppResult<()> 
     Ok(())
 }
 
+/// Converts a CSV row into a transaction command.
+///
+/// # Arguments
+/// * `row` - A single row from the CSV file, parsed into an `InputRow` struct.
+///
+/// # Returns
+/// * `AppResult<Box<dyn TxCommandTrait>>` - Returns a boxed transaction command if successful,
+///   or an `AppErrors` variant if an error occurs.
 fn row_to_command(row: InputRow) -> AppResult<Box<dyn TxCommandTrait>> {
     match row.t {
         CsvTxType::Deposit => {
